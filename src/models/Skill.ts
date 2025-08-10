@@ -4,8 +4,8 @@ import sequelize from '../config/database';
 interface SkillAttributes {
   id: string;
   name: string;
-  category: 'Frontend' | 'Backend' | 'Tool' | 'SoftSkill';
-  level: 'Beginner' | 'Intermediate' | 'Advanced';
+  category: 'Frontend' | 'Backend' | 'DataAnalytics'| 'SystemAdministration'| 'Tool' | 'SoftSkill';
+  percentage: number;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -15,8 +15,8 @@ interface SkillCreationAttributes extends Optional<SkillAttributes, 'id' | 'crea
 class Skill extends Model<SkillAttributes, SkillCreationAttributes> implements SkillAttributes {
   public id!: string;
   public name!: string;
-  public category!: 'Frontend' | 'Backend' | 'Tool' | 'SoftSkill';
-  public level!: 'Beginner' | 'Intermediate' | 'Advanced';
+  public category!: 'Frontend' | 'Backend' | 'DataAnalytics'| 'SystemAdministration'| 'Tool' | 'SoftSkill';
+  public percentage!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -36,9 +36,13 @@ Skill.init(
       type: DataTypes.ENUM('Frontend', 'Backend', 'Tool', 'SoftSkill'),
       allowNull: false
     },
-    level: {
-      type: DataTypes.ENUM('Beginner', 'Intermediate', 'Advanced'),
-      allowNull: false
+    percentage: {
+      type: DataTypes.INTEGER, 
+      allowNull: false,
+      validate: {
+        min: 0,
+        max: 100
+      }
     },
     createdAt: {
       type: DataTypes.DATE,

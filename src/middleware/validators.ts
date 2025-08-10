@@ -48,8 +48,8 @@ export const subscriberValidation = [
 
 export const skillValidation = [
   body('name').notEmpty().withMessage('Name is required'),
-  body('category').isIn(['Frontend', 'Backend', 'Tool', 'SoftSkill']).withMessage('Invalid category'),
-  body('level').isIn(['Beginner', 'Intermediate', 'Advanced']).withMessage('Invalid level')
+  body('category').isIn(['Frontend', 'Backend', 'DataAnalytics', 'SystemAdministration', 'Tool', 'SoftSkill']).withMessage('Invalid category'),
+  body('percentage').isInt({ min: 0, max: 100 }).withMessage('Percentage must be an integer between 0 and 100')
 ];
 
 export const serviceValidation = [

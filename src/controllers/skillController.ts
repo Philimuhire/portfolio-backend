@@ -2,9 +2,6 @@ import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import Skill from '../models/Skill';
 
-// @desc    Get all skills
-// @route   GET /api/skills
-// @access  Public
 export const getSkills = async (req: Request, res: Response): Promise<void> => {
   try {
     const skills = await Skill.findAll({
@@ -21,9 +18,6 @@ export const getSkills = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// @desc    Create a skill
-// @route   POST /api/skills
-// @access  Private/Admin
 export const createSkill = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -32,12 +26,12 @@ export const createSkill = async (req: Request, res: Response): Promise<void> =>
   }
 
   try {
-    const { name, category, level } = req.body;
+    const { name, category, percentage } = req.body; 
     
     const skill = await Skill.create({
       name,
       category,
-      level
+      percentage
     });
 
     res.status(201).json(skill);
@@ -47,9 +41,6 @@ export const createSkill = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-// @desc    Update a skill
-// @route   PUT /api/skills/:id
-// @access  Private/Admin
 export const updateSkill = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -61,11 +52,11 @@ export const updateSkill = async (req: Request, res: Response): Promise<void> =>
     const skill = await Skill.findByPk(req.params.id);
     
     if (skill) {
-      const { name, category, level } = req.body;
+      const { name, category, percentage } = req.body; 
       
-      skill.name = name || skill.name;
-      skill.category = category || skill.category;
-      skill.level = level || skill.level;
+      skill.name = name ?? skill.name;
+      skill.category = category ?? skill.category;
+      skill.percentage = percentage ?? skill.percentage;
       
       const updatedSkill = await skill.save();
       res.json(updatedSkill);
@@ -78,9 +69,6 @@ export const updateSkill = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-// @desc    Delete a skill
-// @route   DELETE /api/skills/:id
-// @access  Private/Admin
 export const deleteSkill = async (req: Request, res: Response): Promise<void> => {
   try {
     const skill = await Skill.findByPk(req.params.id);

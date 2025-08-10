@@ -31,15 +31,15 @@ const seedDatabase = async () => {
     
     // Create some skills
     const skills = [
-      { name: 'JavaScript', category: 'Frontend', level: 'Advanced' },
-      { name: 'TypeScript', category: 'Frontend', level: 'Advanced' },
-      { name: 'React', category: 'Frontend', level: 'Advanced' },
-      { name: 'Node.js', category: 'Backend', level: 'Advanced' },
-      { name: 'Express', category: 'Backend', level: 'Advanced' },
-      { name: 'PostgreSQL', category: 'Backend', level: 'Intermediate' },
-      { name: 'Git', category: 'Tool', level: 'Advanced' },
-      { name: 'Problem Solving', category: 'SoftSkill', level: 'Advanced' }
-    ];
+  { name: 'JavaScript', category: 'Frontend', percentage: 90 },
+  { name: 'TypeScript', category: 'Frontend', percentage: 85 },
+  { name: 'React', category: 'Frontend', percentage: 80 },
+  { name: 'Node.js', category: 'Backend', percentage: 85 },
+  { name: 'Express', category: 'Backend', percentage: 80 },
+  { name: 'PostgreSQL', category: 'Backend', percentage: 75 },
+  { name: 'Git', category: 'Tool', percentage: 90 },
+  { name: 'Problem Solving', category: 'SoftSkill', percentage: 95 }
+];
     
     await Skill.bulkCreate(skills as any);
     console.log('Skills created.');
