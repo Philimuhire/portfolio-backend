@@ -3,9 +3,6 @@ import { validationResult } from 'express-validator';
 import Message from '../models/Message';
 import nodemailer from 'nodemailer';
 
-// @desc    Create a new message (contact form)
-// @route   POST /api/messages
-// @access  Public
 export const createMessage = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -23,7 +20,6 @@ export const createMessage = async (req: Request, res: Response): Promise<void> 
       message
     });
 
-    // Optional: Send email notification
     if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
       try {
         const transporter = nodemailer.createTransport({
@@ -38,7 +34,7 @@ export const createMessage = async (req: Request, res: Response): Promise<void> 
 
         await transporter.sendMail({
           from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-          to: process.env.EMAIL_USER, // send to yourself
+          to: process.env.EMAIL_USER, 
           subject: `New Contact: ${subject}`,
           text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
           html: `<p><strong>Name:</strong> ${name}</p>
@@ -47,7 +43,6 @@ export const createMessage = async (req: Request, res: Response): Promise<void> 
         });
       } catch (emailError) {
         console.error('Email sending error:', emailError);
-        // Continue with the response, don't fail if email fails
       }
     }
 
@@ -58,9 +53,6 @@ export const createMessage = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-// @desc    Get all messages
-// @route   GET /api/messages
-// @access  Private/Admin
 export const getMessages = async (req: Request, res: Response): Promise<void> => {
   try {
     const messages = await Message.findAll({

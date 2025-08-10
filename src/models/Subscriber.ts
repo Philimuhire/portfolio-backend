@@ -4,18 +4,19 @@ import sequelize from '../config/database';
 interface SubscriberAttributes {
   id: string;
   email: string;
-  name?: string;
   subscribedAt: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-interface SubscriberCreationAttributes extends Optional<SubscriberAttributes, 'id' | 'name' | 'subscribedAt' | 'createdAt' | 'updatedAt'> {}
+interface SubscriberCreationAttributes
+  extends Optional<SubscriberAttributes, 'id' | 'subscribedAt' | 'createdAt' | 'updatedAt'> {}
 
-class Subscriber extends Model<SubscriberAttributes, SubscriberCreationAttributes> implements SubscriberAttributes {
+class Subscriber
+  extends Model<SubscriberAttributes, SubscriberCreationAttributes>
+  implements SubscriberAttributes {
   public id!: string;
   public email!: string;
-  public name!: string;
   public subscribedAt!: Date;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -35,10 +36,6 @@ Subscriber.init(
       validate: {
         isEmail: true
       }
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: true
     },
     subscribedAt: {
       type: DataTypes.DATE,
