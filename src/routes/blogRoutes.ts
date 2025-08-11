@@ -12,12 +12,13 @@ import {
 } from '../controllers/blogController';
 import { protect, admin } from '../middleware/auth';
 import { blogValidation, commentValidation, reactionValidation } from '../middleware/validators';
+import { upload } from '../config/cloudinary';
 
 const router = express.Router();
 
 router.route('/')
   .get(getBlogs)
-  .post(protect, admin, blogValidation, createBlog);
+  .post(protect, admin, upload.single('coverImage'), blogValidation, createBlog);
 
 router.route('/:id')
   .get(getBlogById)

@@ -4,9 +4,6 @@ import Blog from '../models/Blog';
 import BlogComment from '../models/BlogComment';
 import BlogReaction from '../models/BlogReaction';
 
-// @desc    Get all blogs
-// @route   GET /api/blogs
-// @access  Public
 export const getBlogs = async (req: Request, res: Response): Promise<void> => {
   try {
     const blogs = await Blog.findAll({
@@ -22,9 +19,6 @@ export const getBlogs = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// @desc    Get single blog
-// @route   GET /api/blogs/:id
-// @access  Public
 export const getBlogById = async (req: Request, res: Response): Promise<void> => {
   try {
     const blog = await Blog.findByPk(req.params.id, {
@@ -45,9 +39,6 @@ export const getBlogById = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-// @desc    Create a blog
-// @route   POST /api/blogs
-// @access  Private/Admin
 export const createBlog = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -56,14 +47,18 @@ export const createBlog = async (req: Request, res: Response): Promise<void> => 
   }
 
   try {
-    const { title, content, coverImage, tags } = req.body;
-    
+    const { title, content, tags } = req.body;
+
+    const coverImage = req.file ? (req.file as any).path : null;
+
     const blog = await Blog.create({
       title,
       content,
       coverImage,
       postedDate: new Date(),
-      tags: Array.isArray(tags) ? tags : tags.split(',').map((tag: string) => tag.trim())
+      tags: Array.isArray(tags)
+        ? tags
+        : tags.split(',').map((tag: string) => tag.trim()),
     });
 
     res.status(201).json(blog);
@@ -73,9 +68,6 @@ export const createBlog = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-// @desc    Update a blog
-// @route   PUT /api/blogs/:id
-// @access  Private/Admin
 export const updateBlog = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -110,9 +102,6 @@ export const updateBlog = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-// @desc    Delete a blog
-// @route   DELETE /api/blogs/:id
-// @access  Private/Admin
 export const deleteBlog = async (req: Request, res: Response): Promise<void> => {
   try {
     const blog = await Blog.findByPk(req.params.id);
@@ -129,9 +118,6 @@ export const deleteBlog = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-// @desc    Add comment to blog
-// @route   POST /api/blogs/:id/comments
-// @access  Public
 export const addBlogComment = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -163,9 +149,6 @@ export const addBlogComment = async (req: Request, res: Response): Promise<void>
   }
 };
 
-// @desc    Get comments for a blog
-// @route   GET /api/blogs/:id/comments
-// @access  Public
 export const getBlogComments = async (req: Request, res: Response): Promise<void> => {
   try {
     const comments = await BlogComment.findAll({
@@ -180,9 +163,6 @@ export const getBlogComments = async (req: Request, res: Response): Promise<void
   }
 };
 
-// @desc    Add reaction to blog
-// @route   POST /api/blogs/:id/reactions
-// @access  Public
 export const addBlogReaction = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -200,7 +180,6 @@ export const addBlogReaction = async (req: Request, res: Response): Promise<void
     
     const { userEmail, reaction } = req.body;
     
-    // Check if user already reacted
     const existingReaction = await BlogReaction.findOne({
       where: { blogId: blog.id, userEmail }
     });
@@ -225,9 +204,6 @@ export const addBlogReaction = async (req: Request, res: Response): Promise<void
   }
 };
 
-// @desc    Get reactions for a blog
-// @route   GET /api/blogs/:id/reactions
-// @access  Public
 export const getBlogReactions = async (req: Request, res: Response): Promise<void> => {
   try {
     const reactions = await BlogReaction.findAll({
