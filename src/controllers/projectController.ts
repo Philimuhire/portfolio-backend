@@ -2,9 +2,6 @@ import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 import Project from '../models/Project';
 
-// @desc    Get all projects
-// @route   GET /api/projects
-// @access  Public
 export const getProjects = async (req: Request, res: Response): Promise<void> => {
   try {
     const projects = await Project.findAll();
@@ -15,9 +12,6 @@ export const getProjects = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
-// @desc    Get single project
-// @route   GET /api/projects/:id
-// @access  Public
 export const getProjectById = async (req: Request, res: Response): Promise<void> => {
   try {
     const project = await Project.findByPk(req.params.id);
@@ -33,9 +27,6 @@ export const getProjectById = async (req: Request, res: Response): Promise<void>
   }
 };
 
-// @desc    Create a project
-// @route   POST /api/projects
-// @access  Private/Admin
 export const createProject = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -44,7 +35,9 @@ export const createProject = async (req: Request, res: Response): Promise<void> 
   }
 
   try {
-    const { title, description, techStack, githubLink, liveLink, imageUrl } = req.body;
+    const { title, description, techStack, githubLink, liveLink } = req.body;
+
+    const imageUrl = req.file ? (req.file as any).path : null;
     
     const project = await Project.create({
       title,
@@ -62,9 +55,6 @@ export const createProject = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-// @desc    Update a project
-// @route   PUT /api/projects/:id
-// @access  Private/Admin
 export const updateProject = async (req: Request, res: Response): Promise<void> => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -102,9 +92,6 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-// @desc    Delete a project
-// @route   DELETE /api/projects/:id
-// @access  Private/Admin
 export const deleteProject = async (req: Request, res: Response): Promise<void> => {
   try {
     const project = await Project.findByPk(req.params.id);
