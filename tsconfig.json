@@ -9,6 +9,6 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/utils/generateToken.ts"],
   "exclude": ["node_modules", "**/*.test.ts"]
 }

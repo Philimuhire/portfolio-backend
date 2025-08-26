@@ -33,7 +33,7 @@ Skill.init(
       allowNull: false
     },
     category: {
-      type: DataTypes.ENUM('Frontend', 'Backend', 'Tool', 'SoftSkill'),
+      type: DataTypes.ENUM('Frontend', 'Backend', 'DataAnalytics', 'SystemAdministration', 'Tool', 'SoftSkill'),
       allowNull: false
     },
     percentage: {

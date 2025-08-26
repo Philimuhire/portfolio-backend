@@ -22,7 +22,7 @@ router.route('/')
 
 router.route('/:id')
   .get(getBlogById)
-  .put(protect, admin, blogValidation, updateBlog)
+  .put(protect, admin, upload.single('coverImage'), blogValidation, updateBlog)
   .delete(protect, admin, deleteBlog);
 
 router.route('/:id/comments')

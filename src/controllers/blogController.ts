@@ -77,30 +77,34 @@ export const updateBlog = async (req: Request, res: Response): Promise<void> => 
 
   try {
     const blog = await Blog.findByPk(req.params.id);
-    
-    if (blog) {
-      const { title, content, coverImage, tags } = req.body;
-      
-      blog.title = title || blog.title;
-      blog.content = content || blog.content;
-      blog.coverImage = coverImage || blog.coverImage;
-      
-      if (tags) {
-        blog.tags = Array.isArray(tags) 
-          ? tags 
-          : tags.split(',').map((tag: string) => tag.trim());
-      }
-      
-      const updatedBlog = await blog.save();
-      res.json(updatedBlog);
-    } else {
+
+    if (!blog) {
       res.status(404).json({ message: 'Blog not found' });
+      return;
     }
+
+    const { title, content, tags } = req.body;
+
+    const coverImage = req.file ? (req.file as any).path : blog.coverImage;
+
+    blog.title = title || blog.title;
+    blog.content = content || blog.content;
+    blog.coverImage = coverImage;
+
+    if (tags) {
+      blog.tags = Array.isArray(tags)
+        ? tags
+        : tags.split(',').map((tag: string) => tag.trim());
+    }
+
+    const updatedBlog = await blog.save();
+    res.json(updatedBlog);
   } catch (error) {
     console.error('Update blog error:', error);
     res.status(500).json({ message: 'Server error updating blog' });
   }
 };
+
 
 export const deleteBlog = async (req: Request, res: Response): Promise<void> => {
   try {

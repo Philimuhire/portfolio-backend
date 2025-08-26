@@ -18,7 +18,7 @@ router.route('/')
 
 router.route('/:id')
   .get(getProjectById)
-  .put(protect, admin, projectValidation, updateProject)
+  .put(protect, admin, upload.single('imageUrl'), projectValidation, updateProject)
   .delete(protect, admin, deleteProject);
 
 export default router;

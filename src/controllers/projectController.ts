@@ -64,28 +64,30 @@ export const updateProject = async (req: Request, res: Response): Promise<void> 
 
   try {
     const project = await Project.findByPk(req.params.id);
-    
-    if (project) {
-      const { title, description, techStack, githubLink, liveLink, imageUrl } = req.body;
-      
-      project.title = title || project.title;
-      project.description = description || project.description;
-      
-      if (techStack) {
-        project.techStack = Array.isArray(techStack) 
-          ? techStack 
-          : techStack.split(',').map((tech: string) => tech.trim());
-      }
-      
-      project.githubLink = githubLink || project.githubLink;
-      project.liveLink = liveLink || project.liveLink;
-      project.imageUrl = imageUrl || project.imageUrl;
-      
-      const updatedProject = await project.save();
-      res.json(updatedProject);
-    } else {
+
+    if (!project) {
       res.status(404).json({ message: 'Project not found' });
+      return;
     }
+
+    const { title, description, techStack, githubLink, liveLink } = req.body;
+
+    const imageUrl = req.file ? (req.file as any).path : project.imageUrl;
+
+    project.title = title || project.title;
+    project.description = description || project.description;
+    project.githubLink = githubLink || project.githubLink;
+    project.liveLink = liveLink || project.liveLink;
+    project.imageUrl = imageUrl;
+
+    if (techStack) {
+      project.techStack = Array.isArray(techStack)
+        ? techStack
+        : techStack.split(',').map((tech: string) => tech.trim());
+    }
+
+    const updatedProject = await project.save();
+    res.json(updatedProject);
   } catch (error) {
     console.error('Update project error:', error);
     res.status(500).json({ message: 'Server error updating project' });
