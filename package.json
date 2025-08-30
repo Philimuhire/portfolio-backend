@@ -32,6 +32,7 @@
     "nodemailer": "^7.0.3",
     "pg": "^8.16.0",
     "pg-hstore": "^2.3.4",
+    "psql": "^0.0.1",
     "sequelize": "^6.37.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"

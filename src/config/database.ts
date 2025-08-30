@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const isProduction = process.env.NODE_ENV === 'production';
+const useSSL = process.env.DB_SSL === 'true';
 
 const sequelize = new Sequelize(
   process.env.DB_NAME || 'portfolio',
@@ -18,8 +19,16 @@ const sequelize = new Sequelize(
       max: 5,
       min: 0,
       acquire: 30000,
-      idle: 10000
-    }
+      idle: 10000,
+    },
+    dialectOptions: useSSL
+      ? {
+          ssl: {
+            require: true,
+            rejectUnauthorized: false, 
+          },
+        }
+      : {},
   }
 );
 
